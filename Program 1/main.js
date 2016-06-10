@@ -10,7 +10,7 @@ var mainState = {
         game.load.image('background', 'assets/background.png');
         
         //Audio
-        game.load.audio('E40', ['assets/E40.mp3'])
+        game.load.audio('E40', ['assets/E40.ogg'])
     },
     
     create: function() { 
@@ -39,6 +39,9 @@ var mainState = {
 
         this.scoreLabel = game.add.text(30, 30, 'score: 0', { font: '18px Arial', fill: '#ffffff' });
         this.score = 0;
+        
+        this.scoreLabel = game.add.text(-30, -30, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
+        this.score = 0;
 
         this.enemies = game.add.group();
         this.enemies.enableBody = true;
@@ -57,7 +60,6 @@ var mainState = {
         game.physics.arcade.overlap(this.player, this.enemies, this.playerDie, null, this);
 
         this.movePlayer(); 
-
         if (!this.player.inWorld) {
             this.playerDie();
         }
@@ -75,10 +77,9 @@ var mainState = {
         else {
             this.player.body.velocity.x = 0;
         }
-
         if (this.cursor.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -320;
-        }      
+        }
     },
 
     takeCoin: function(player, coin) {
