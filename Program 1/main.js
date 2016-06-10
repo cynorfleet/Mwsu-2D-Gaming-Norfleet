@@ -1,11 +1,12 @@
 var mainState = {
 
     preload: function() {
-        game.load.image('player', 'assets/Curry.png');
+        game.load.image('player_left', 'assets/Curry_left.png');
+        game.load.image('player_right', 'assets/Curry_right.png');
         game.load.image('wallV', 'assets/wallVertical.png');
         game.load.image('wallH', 'assets/wallHorizontal.png');
         game.load.image('coin', 'assets/Basket.png');
-        game.load.image('enemy', 'assets/Lebron.png');
+        game.load.image('enemy', 'assets/Lebronpixel.png');
         game.load.image('background', 'assets/background.png');
         
         //Audio
@@ -22,7 +23,7 @@ var mainState = {
 
         this.cursor = game.input.keyboard.createCursorKeys();
         
-        this.player = game.add.sprite(game.width/2, game.height/2, 'player');
+        this.player = game.add.sprite(game.width/2, game.height/2, 'player_left');
         this.player.anchor.setTo(0.5, 0.5);
         game.physics.arcade.enable(this.player);
         this.player.body.gravity.y = 500;
@@ -60,14 +61,15 @@ var mainState = {
         if (!this.player.inWorld) {
             this.playerDie();
         }
-
     },
         
     movePlayer: function() {
         if (this.cursor.left.isDown) {
+            this.player.loadTexture("player_left", 0);
             this.player.body.velocity.x = -200;
         }
         else if (this.cursor.right.isDown) {
+            this.player.loadTexture("player_right", 0);
             this.player.body.velocity.x = 200;
         }
         else {
