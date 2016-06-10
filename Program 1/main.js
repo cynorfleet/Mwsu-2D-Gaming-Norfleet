@@ -7,8 +7,11 @@ var mainState = {
         game.load.image('coin', 'assets/Basket.png');
         game.load.image('enemy', 'assets/Lebron.png');
         game.load.image('background', 'assets/background.png');
+        
+        //Audio
+        game.load.audio('E40', ['assets/E40.mp3'])
     },
-
+    
     create: function() { 
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.renderer.renderSession.roundPixels = true;
@@ -40,6 +43,10 @@ var mainState = {
         this.enemies.enableBody = true;
         this.enemies.createMultiple(10, 'enemy');
         game.time.events.loop(2200, this.addEnemy, this);
+        
+        //Music
+        this.music = this.game.add.audio("E40");
+        this.music.play();
     },
 
     update: function() {
@@ -53,8 +60,9 @@ var mainState = {
         if (!this.player.inWorld) {
             this.playerDie();
         }
-    },
 
+    },
+        
     movePlayer: function() {
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
@@ -101,7 +109,7 @@ var mainState = {
         if (!enemy) {
             return;
         }
-
+        
         enemy.anchor.setTo(0.5, 1);
         enemy.reset(game.width/2, 0);
         enemy.body.gravity.y = 500;
@@ -132,6 +140,7 @@ var mainState = {
     },
 
     playerDie: function() {
+        this.music.stop();
         game.state.start('main');
     },
 };
