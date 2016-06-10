@@ -4,18 +4,14 @@ var mainState = {
         game.load.image('player', 'assets/Curry.png');
         game.load.image('wallV', 'assets/wallVertical.png');
         game.load.image('wallH', 'assets/wallHorizontal.png');
-        game.load.image('coin', 'assets/Basket.png');
+        game.load.image('coin', 'assets/coin.png');
         game.load.image('enemy', 'assets/Lebron.png');
-        game.load.image('background', 'assets/background.png');
     },
 
     create: function() { 
+        game.stage.backgroundColor = '#3498db';
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.renderer.renderSession.roundPixels = true;
-        
-        // Create background and resize it
-        this.background = game.add.sprite(game.width/2, game.height/2, 'background');
-        this.background.scale.setTo(this.game.width / this.background.width, this.game.height / this.background.height + .00 );
 
         this.cursor = game.input.keyboard.createCursorKeys();
         
@@ -29,9 +25,6 @@ var mainState = {
         this.coin = game.add.sprite(60, 140, 'coin');
         game.physics.arcade.enable(this.coin); 
         this.coin.anchor.setTo(0.5, 0.5);
-        
-        // Anchor the background for proper placement
-        this.background.anchor.setTo(0.5, 0.5);
 
         this.scoreLabel = game.add.text(30, 30, 'score: 0', { font: '18px Arial', fill: '#ffffff' });
         this.score = 0;
@@ -72,7 +65,7 @@ var mainState = {
     },
 
     takeCoin: function(player, coin) {
-        this.score += 3;
+        this.score += 5;
         this.scoreLabel.text = 'score: ' + this.score;
 
         this.updateCoinPosition();
