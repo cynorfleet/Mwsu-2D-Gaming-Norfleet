@@ -40,8 +40,9 @@ var mainState = {
         this.scoreLabel = game.add.text(30, 30, 'score: 0', { font: '18px Arial', fill: '#ffffff' });
         this.score = 0;
         
-        this.scoreLabel = game.add.text(-30, -30, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
-        this.score = 0;
+        // Display turnover scoreboard
+        this.turnLabel = game.add.text(-100, -160, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
+        this.turnovers = 0;
 
         this.enemies = game.add.group();
         this.enemies.enableBody = true;
@@ -57,11 +58,11 @@ var mainState = {
         game.physics.arcade.collide(this.player, this.walls);
         game.physics.arcade.collide(this.enemies, this.walls);
         game.physics.arcade.overlap(this.player, this.coin, this.takeCoin, null, this);
-        game.physics.arcade.overlap(this.player, this.enemies, this.playerDie, null, this);
+        game.physics.arcade.overlap(this.player, this.enemies, this.playerTurnover, null, this);
 
         this.movePlayer(); 
         if (!this.player.inWorld) {
-            this.playerDie();
+            this.respawn();
         }
     },
         
@@ -80,6 +81,20 @@ var mainState = {
         if (this.cursor.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -320;
         }
+    },
+    
+    respawn: function() {
+        var playerposition = [
+           /* {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, */{x: 430, y: 280}, {x: game.width /2, y: game.height /2}
+        ];
+        
+        var newPosition = game.rnd.pick(playerposition);
+        this.player.reset(newPosition.x, newPosition.y);
+    },
+    
+    playerTurnover: function() {
+        this.turnovers +=1;
+        this.turnLabel.text = 'turnovers: ' + this.turnovers;
     },
 
     takeCoin: function(player, coin) {
