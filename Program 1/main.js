@@ -41,7 +41,7 @@ var mainState = {
         this.score = 0;
         
         // Display turnover scoreboard
-        this.turnLabel = game.add.text(-100, -160, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
+        this.turnLabel = game.add.text(380, 300, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
         this.turnovers = 0;
 
         this.enemies = game.add.group();
@@ -56,6 +56,7 @@ var mainState = {
 
     update: function() {
         game.physics.arcade.collide(this.player, this.walls);
+        game.physics.arcade.collide(this.enemies, this.walls);
         game.physics.arcade.collide(this.enemies, this.walls);
         game.physics.arcade.overlap(this.player, this.coin, this.takeCoin, null, this);
         game.physics.arcade.overlap(this.player, this.enemies, this.playerTurnover, null, this);
@@ -85,7 +86,7 @@ var mainState = {
     
     respawn: function() {
         var playerposition = [
-           /* {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, */{x: 430, y: 280}, {x: game.width /2, y: game.height /2}
+           {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}
         ];
         
         var newPosition = game.rnd.pick(playerposition);
@@ -95,6 +96,7 @@ var mainState = {
     playerTurnover: function() {
         this.turnovers +=1;
         this.turnLabel.text = 'turnovers: ' + this.turnovers;
+        this.respawn();
     },
 
     takeCoin: function(player, coin) {
