@@ -49,6 +49,27 @@ var mainState = {
         this.enemies.createMultiple(10, 'enemy');
         game.time.events.loop(2200, this.addEnemy, this);
         
+        // Display time left in quarter
+        game.time.events.loop(6000, this.timeLeft, this);
+        this.timeLabel = game.add.text(380, 30, '4th Quarter: 0', { font: '18px Arial', fill: '#ffffff' });
+var timeleft;
+this.seconds = 0;
+this.minutes = 0;
+   
+
+function updateTimer() {    
+minutes = Math.floor(game.time.time / 60000) % 60;    
+seconds = Math.floor(game.time.time / 1000) % 60;    
+milliseconds = Math.floor(game.time.time) % 100;    
+//If any of the digits becomes a single digit number, pad it with a zero    
+if (milliseconds < 10)        
+milliseconds = '0' + milliseconds;    
+if (seconds < 10)        
+seconds = '0' + seconds;    
+if (minutes < 10)        
+minutes = '0' + minutes;    
+timer.setText(minutes + ':'+ seconds + ':' + milliseconds);}
+        
         //Music
         this.music = this.game.add.audio("E40");
         this.music.play();
