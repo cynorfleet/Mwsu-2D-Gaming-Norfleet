@@ -86,7 +86,7 @@ var mainState = {
     
     respawn: function() {
         var playerposition = [
-           {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}
+           /*{x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}, {x: 400, y: 300}, */{x: 440, y: 110}
         ];
         
         var newPosition = game.rnd.pick(playerposition);
@@ -94,16 +94,34 @@ var mainState = {
     },
     
     playerTurnover: function() {
+        // Make a penalty flag and pass it to score update function
+        this.punish = true;
+        this.takeCoin(this.player, this.coin, this.punish);
+        // Increment the turnover counter
         this.turnovers +=1;
         this.turnLabel.text = 'turnovers: ' + this.turnovers;
+        // Make player respawn
         this.respawn();
     },
 
-    takeCoin: function(player, coin) {
-        this.score += 3;
+    takeCoin: function(player, coin, punish) {
+        // Creates penalty for turnover
+        if(this.punish == true && this.score > 0)
+        {
+            // Lebron makes a Layup
+            this.score -=2;
+            // Make sure score is never negative
+            if(this.score < 0)
+                this.score = 0;
+        }
+        // If no Turnover count the shot
+        else if(this.punish == false){
+            this.score += 3;
+            this.updateCoinPosition();
+            }
         this.scoreLabel.text = 'score: ' + this.score;
-
-        this.updateCoinPosition();
+        //Reset the penalty flag
+        this.punish = false;
     },
 
     updateCoinPosition: function() {
