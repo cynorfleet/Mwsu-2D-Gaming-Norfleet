@@ -50,26 +50,10 @@ var mainState = {
         game.time.events.loop(2200, this.addEnemy, this);
         
         // Display time left in quarter
-        game.time.events.loop(6000, this.timeLeft, this);
-        this.timeLabel = game.add.text(380, 30, '4th Quarter: 0', { font: '18px Arial', fill: '#ffffff' });
-var timeleft;
-this.seconds = 0;
-this.minutes = 0;
-   
-
-function updateTimer() {    
-minutes = Math.floor(game.time.time / 60000) % 60;    
-seconds = Math.floor(game.time.time / 1000) % 60;    
-milliseconds = Math.floor(game.time.time) % 100;    
-//If any of the digits becomes a single digit number, pad it with a zero    
-if (milliseconds < 10)        
-milliseconds = '0' + milliseconds;    
-if (seconds < 10)        
-seconds = '0' + seconds;    
-if (minutes < 10)        
-minutes = '0' + minutes;    
-timer.setText(minutes + ':'+ seconds + ':' + milliseconds);}
-        
+        this.timeLabel = game.add.text(340, 30, '4th Quarter: 2:00', { font: '18px Arial', fill: '#ffffff' });
+        this.seconds = 0;
+        this.minutes = 0;
+    
         //Music
         this.music = this.game.add.audio("E40");
         this.music.play();
@@ -87,7 +71,7 @@ timer.setText(minutes + ':'+ seconds + ':' + milliseconds);}
             this.respawn();
         }
     },
-        
+            
     movePlayer: function() {
         if (this.cursor.left.isDown) {
             this.player.loadTexture("player_left", 0);
@@ -107,7 +91,7 @@ timer.setText(minutes + ':'+ seconds + ':' + milliseconds);}
     
     respawn: function() {
         var playerposition = [
-           /*{x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}, {x: 400, y: 300}, */{x: 440, y: 110}
+           {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}, {x: 400, y: 200}, {x: 440, y: 110}
         ];
         
         var newPosition = game.rnd.pick(playerposition);
