@@ -41,7 +41,7 @@ var mainState = {
         this.score = 0;
         
         // Display turnover scoreboard
-        this.turnLabel = game.add.text(340, 320, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
+        this.turnLabel = game.add.text(375, 320, 'turnovers: 0', { font: '18px Arial', fill: '#ffffff' });
         this.turnovers = 0;
 
         this.enemies = game.add.group();
@@ -50,7 +50,8 @@ var mainState = {
         game.time.events.loop(2200, this.addEnemy, this);
         
         // Display time left in quarter
-        this.timeLabel = game.add.text(340, 0, '4th Quarter: ', { font: '18px Arial', fill: '#ffffff' });
+        this.gmSec = 120;
+        this.timeLabel = game.add.text(340, 0, '4th Quarter: 120', { font: '18px Arial', fill: '#ffffff' });
         game.time.events.loop(1000, this.updateTimer, this);
         
         //Music
@@ -69,13 +70,21 @@ var mainState = {
         if (!this.player.inWorld) {
             this.respawn();
         }
+        
+        // Update game countdown every 1000 millisecs
+        if((Math.floor(game.time.time) % 1000) == 0)
+            this.updateTimer();
+        
+        // End Game when countdown hits 0
+        if(this.gmSec == 0)
+            this.playerDie();
     },
     
     updateTimer: function() { 
-        //VARIABLES  
-        this.gmSec = Math.floor(game.time.time / 1000) % 60;       
-        //If any of the digit are single digit, preceed with '0'       
-        this.timeLabel.setText('4th Quarter: ' + (120 - this.gmSec));
+        // Subtract 1 sec  
+        this.gmSec -=1;
+        // Refresh countdown display
+        this.timeLabel.setText('4th Quarter: ' + (this.gmSec));
     },
             
     movePlayer: function() {
@@ -91,7 +100,7 @@ var mainState = {
             this.player.body.velocity.x = 0;
         }
         if (this.cursor.up.isDown && this.player.body.touching.down) {
-            this.player.body.velocity.y = -320;
+            this.player.body.velocity.y = -290;
         }
     },
     
