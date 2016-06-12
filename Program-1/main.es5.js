@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 var mainState = {
     preload: function preload() {
@@ -25,7 +25,7 @@ var mainState = {
         this.player = game.add.sprite(game.width / 2, game.height / 2, 'player');
 
         /**
-         * Manipulating the anchor position of the added player, eventually 
+         * Manipulating the anchor position of the added player, eventually
          * we decide on centering it.
          */
         // Set the anchor point to the top left of the sprite (default value)
