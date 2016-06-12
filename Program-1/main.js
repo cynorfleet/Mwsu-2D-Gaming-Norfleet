@@ -37,6 +37,7 @@ var mainState = {
         // Anchor the background for proper placement
         this.background.anchor.setTo(0.5, 0.5);
 
+        // Display scoreboard
         this.scoreLabel = game.add.text(20, 0, 'score: 0', { font: '18px Arial', fill: '#ffffff' });
         this.score = 0;
 
@@ -104,12 +105,15 @@ var mainState = {
         }
     },
 
+    // Puts player at random location on map
     respawn: function() {
+        // Set position array for player to appear
         var playerposition = [
            {x: 40, y: 260}, {x: 140, y: 50}, {x: 400, y: 50}, {x: 430, y: 280}, {x: game.width /2, y: game.height /2}, {x: 400, y: 200}, {x: 440, y: 110}
         ];
-
+        // choose a random location in array
         var newPosition = game.rnd.pick(playerposition);
+        // initiate respawn
         this.player.reset(newPosition.x, newPosition.y);
     },
 
@@ -119,6 +123,7 @@ var mainState = {
         this.takeCoin(this.player, this.coin, this.punish);
         // Increment the turnover counter
         this.turnovers +=1;
+        // Update turnover counter
         this.turnLabel.text = 'turnovers: ' + this.turnovers;
         // Make player respawn
         this.respawn();
@@ -139,6 +144,7 @@ var mainState = {
             this.score += 3;
             this.updateCoinPosition();
             }
+        // Update scoreboard
         this.scoreLabel.text = 'score: ' + this.score;
         //Reset the penalty flag
         this.punish = false;
@@ -198,6 +204,7 @@ var mainState = {
     },
 
     playerDie: function() {
+        // Halts music at the end of game
         this.music.stop();
         game.state.start('main');
     },
