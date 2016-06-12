@@ -1,16 +1,30 @@
 var mainState = {
 
     preload: function() {
-        game.load.image('player_left', 'assets/Curry_left.png');
-        game.load.image('player_right', 'assets/Curry_right.png');
-        game.load.image('wallV', 'assets/wallVertical.png');
-        game.load.image('wallH', 'assets/wallHorizontal.png');
-        game.load.image('coin', 'assets/Basket.png');
-        game.load.image('enemy', 'assets/Lebronpixel.png');
-        game.load.image('background', 'assets/background.png');
+        game.load.image('player_left', 'assets/pic/Curry_left.png');
+        game.load.image('player_right', 'assets/pic/Curry_right.png');
+        game.load.image('wallV', 'assets/pic/wallVertical.png');
+        game.load.image('wallH', 'assets/pic/wallHorizontal.png');
+        game.load.image('coin', 'assets/pic/Basket.png');
+        game.load.image('enemy', 'assets/pic/Lebronpixel.png');
+        game.load.image('background', 'assets/pic/background.png');
         
-        //Audio
-        game.load.audio('E40', ['assets/E40.ogg'])
+        // Sounds
+        game.load.audio('Curry1', ['assets/sound/Curry_another.ogg']);
+        game.load.audio('Curry2', ['assets/sound/Curry_bang.ogg']);
+        game.load.audio('Curry3', ['assets/sound/Curry_firesaway.ogg']);
+        game.load.audio('Curry4', ['assets/sound/Curry_for3.ogg']);
+        game.load.audio('Curry5', ['assets/sound/Curry_fromdowntown.ogg']);
+        game.load.audio('Curry6', ['assets/sound/Curry_fromthecorner.ogg']);
+        game.load.audio('Curry7', ['assets/sound/Curry_itsgood.ogg']);
+        game.load.audio('Curry8', ['assets/sound/Curry_longdistance.ogg']);
+        game.load.audio('Curry9', ['assets/sound/Curry_putsitin.ogg']);
+        game.load.audio('Curry10', ['assets/sound/Curry_stepback.ogg']);
+        game.load.audio('Lebron1', ['assets/sound/Lebron_flushesitdown.ogg']);
+        
+        
+        // Audio
+        game.load.audio('E40', ['assets/music/E40.ogg']);
     },
     
     create: function() { 
@@ -54,7 +68,27 @@ var mainState = {
         this.timeLabel = game.add.text(340, 0, '4th Quarter: 120', { font: '18px Arial', fill: '#ffffff' });
         game.time.events.loop(1000, this.updateTimer, this);
         
-        //Music
+        // Create Curry souund effects
+        this.Currysounds = [
+            game.add.audio('Curry1'),
+            game.add.audio('Curry2'),
+            game.add.audio('Curry3'),               
+            game.add.audio('Curry4'),
+            game.add.audio('Curry5'),
+            game.add.audio('Curry6'),
+            game.add.audio('Curry7'),
+            game.add.audio('Curry8'),
+            game.add.audio('Curry9'),
+            game.add.audio('Curry10'),
+        ]
+        
+        // Create Lebron sound effects
+        this.Lebronsounds = [
+            game.add.audio('Lebron1')
+            ]
+        
+        game.sound.setDecodedCallback([ "E40", this.Currysounds[], this.Lebronsounds[] ], start, this);
+        // Create Music
         this.music = this.game.add.audio("E40");
         this.music.play();
     },
@@ -77,7 +111,7 @@ var mainState = {
         
         // End Game when countdown hits 0
         if(this.gmSec == 0)
-            this.playerDie();
+            this.playerDie();       
     },
     
     updateTimer: function() { 
@@ -128,6 +162,11 @@ var mainState = {
         // Creates penalty for turnover
         if(this.punish == true && this.score > 0)
         {
+            // Play random Lebron sound
+            this.snd = this.game.add.audio(game.rnd.pick(this.Lebronsounds));
+            console.log(this.snd);
+            this.snd.play();
+            
             // Lebron makes a Layup
             this.score -=2;
             // Make sure score is never negative
@@ -136,6 +175,10 @@ var mainState = {
         }
         // If no Turnover count the shot
         else if(this.punish == false){
+            // Play random Curry sound
+            this.snd = this.game.add.audio(game.rnd.pick(this.Currysounds));
+            this.snd.play();
+            
             this.score += 3;
             this.updateCoinPosition();
             }
