@@ -4,20 +4,11 @@ var playState = {
 
         // store sound clips in variables
         this.jumpSound = game.add.audio('jump');
+        this.jumpSound.volume = .2;
         this.coinSound = game.add.audio('coin');
+        this.coinSound.volume = .2;
         this.deadSound = game.add.audio('dead');
-
-        // music plays when game starts
-        this.music = game.add.audio('music'); // Add the music
-        this.music.loop = true; // Make it loop
-
-        // Change the volume of the sound (0 = mute, 1 = full sound)
-        this.music.volume = .7;
-        // Increase the volume from 0 to 1 over the duration specified
-        this.music.fadeIn(5000);
-        // Decrease the volume from its current value to 0 over the duration
-        this.music.fadeOut(5000);
-        this.music.play(); // Start the music
+        this.deadSound.volume = .2;
 
         this.cursor = game.input.keyboard.createCursorKeys();
 
@@ -50,7 +41,40 @@ var playState = {
         this.enemies.enableBody = true;
         this.enemies.createMultiple(10, 'enemy');
         game.time.events.loop(2200, this.addEnemy, this);
-    },
+
+        // Create the emitter with 15 particles. We don't need to set the x y
+        // Since we don't know where to do the explosion yet
+        this.emitter = game.add.emitter(0, 0, 15);
+
+        // Set the 'pixel' image for the particles
+        this.emitter.makeParticles('pixel');
+
+        // Set the x and y speed of the particles between -150 and 150
+        // Speed will be randomly picked between -150 and 150 for each particle
+        this.emitter.setYSpeed(-150, 150);
+        this.emitter.setXSpeed(-150, 150);
+
+        // Scale the particles from 2 time their size to 0 in 800ms
+        // Parameters are: startX, endX, startY, endY, duration
+        this.emitter.setScale(2, 0, 2, 0, 800);
+
+        // Use no gravity
+        this.emitter.gravity = 0;
+
+        if(!this.music){
+         // music plays when game starts
+        this.music = game.add.audio('music'); // Add the music
+        this.music.loop = true; // Make it loop
+        this.music.allowMultiple = false;
+        // Change the volume of the sound (0 = mute, 1 = full sound)
+        this.music.volume = .7;
+        // Increase the volume from 0 to 1 over the duration specified
+        this.music.fadeIn(5000);
+        // Decrease the volume from its current value to 0 over the duration
+        this.music.fadeOut(5000);
+         }
+        this.music.play(); // Start the music
+        },
 
     update: function() {
         game.physics.arcade.collide(this.player, this.walls);
@@ -154,11 +178,42 @@ var playState = {
     },
 
     playerDie: function() {
+
+        // stop music at death
+        //this.music.stop();
+
         // plays sound if player dies
         this.deadSound.play();
 
-        // stop muisic at death
-        this.music.stop();
-        game.state.start('menu');
+        // Set the position of the emitter on top of the player
+        this.emitter.x = this.player.x;
+        this.emitter.y = this.player.y;
+
+        if(this.player.alive){
+
+        // Kill the player to make it disappear from the screen
+        this.player.kill();
+
+        // Flash the color white for 300ms
+        game.camera.flash(0xffffff, 300);
+
+        // Shake for 300ms with an intensity of 0.02
+        game.camera.shake(0.02, 300);
+
+        // Start the emitter by exploding 15 particles that will live 800ms
+        this.emitter.start(true, 800, null, 15);
+
+        // Call the 'startMenu' function in 1000ms
+        game.time.events.add(1000, this.startMenu, this);
+        }
+
+        else
+            game.state.start('menu');
+
+
     },
+
+    startMenu: function() {
+        game.state.start('menu');
+},
 };
