@@ -61,7 +61,6 @@ var playState = {
         // Use no gravity
         this.emitter.gravity = 0;
 
-        if(!this.music){
          // music plays when game starts
         this.music = game.add.audio('music'); // Add the music
         this.music.loop = true; // Make it loop
@@ -72,7 +71,6 @@ var playState = {
         this.music.fadeIn(5000);
         // Decrease the volume from its current value to 0 over the duration
         this.music.fadeOut(5000);
-         }
         this.music.play(); // Start the music
         },
 
@@ -180,7 +178,7 @@ var playState = {
     playerDie: function() {
 
         // stop music at death
-        //this.music.stop();
+        this.music.stop();
 
         // plays sound if player dies
         this.deadSound.play();
