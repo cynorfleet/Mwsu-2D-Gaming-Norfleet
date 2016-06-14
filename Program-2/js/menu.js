@@ -42,19 +42,10 @@ var menuState = {
             localStorage.setItem('bestScore', game.global.score);
         }
 
-         if(!this.music){
-         // music plays when game starts
-        this.music = game.add.audio('music'); // Add the music
-        this.music.loop = true; // Make it loop
-        this.music.allowMultiple = false;
-        // Change the volume of the sound (0 = mute, 1 = full sound)
-        this.music.volume = .7;
-        // Increase the volume from 0 to 1 over the duration specified
-        this.music.fadeIn(5000);
-        // Decrease the volume from its current value to 0 over the duration
-        this.music.fadeOut(5000);
-         }
-        this.music.play(); // Start the music
+        // Add the button that calls the 'toggleSound' function when pressed
+        this.muteButton = game.add.button(20, 20, 'mute', this.toggleSound,this);
+        this.muteButton.frame = game.sound.mute ? 1 : 0;
+
     },
 
     start: function() {
