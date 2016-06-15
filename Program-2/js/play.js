@@ -88,6 +88,9 @@ var playState = {
     },
 
     movePlayer: function() {
+
+        game.time.events.loop(1000, this.enemyAI, this);
+
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
             this.player.animations.play('left'); // Left animation
@@ -107,6 +110,16 @@ var playState = {
             // plays sound if player jumps
             this.jumpSound.play();
         }
+    },
+
+    enemyAI: function(){
+        var aggressive = game.rnd.integerInRange(1, 10);
+
+        if(aggressive > 8)
+            {
+                this.player.body.velocity.x =
+            }
+
     },
 
     takeCoin: function(player, coin) {
