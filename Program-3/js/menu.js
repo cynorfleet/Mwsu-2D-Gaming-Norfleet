@@ -1,6 +1,18 @@
 var menuState = {
 
     create: function() {
+        // Store the relevant text based on the device used
+        var text;
+        if (game.device.desktop) {
+            text = 'press the up arrow key to start';
+        }
+        else {
+            text = 'touch the screen to start';
+        }
+
+        // Display the text variable
+        var startLabel = game.add.text(game.width/2, game.height-80, text, { font: '25px Arial', fill: '#ffffff' });
+
         game.add.image(0, 0, 'background');
 
         if (!localStorage.getItem('bestScore')) {
@@ -20,11 +32,22 @@ var menuState = {
         scoreLabel.anchor.setTo(0.5, 0.5);
 
         var startLabel = game.add.text(game.width/2, game.height-80, 'press the up arrow key to start', { font: '25px Arial', fill: '#ffffff' });
+
         startLabel.anchor.setTo(0.5, 0.5);
         game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
 
         var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
         upKey.onDown.add(this.start, this);
+
+        // If we tap in the top left corner of the game on mobile
+        if (!game.device.desktop && game.input.y < 50 && game.input.x < 60) {
+            // It means we want to mute the game, so we don't start the game
+            return;
+        }
+
+        if (!game.device.desktop) {
+            game.input.onDown.add(this.start, this);
+        }
 
         this.muteButton = game.add.button(20, 20, 'mute', this.toggleSound, this);
         this.muteButton.frame = game.sound.mute ? 1 : 0;
