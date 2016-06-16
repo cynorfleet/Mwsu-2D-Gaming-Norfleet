@@ -1,17 +1,6 @@
 var menuState = {
 
     create: function() {
-        // Store the relevant text based on the device used
-        var text;
-        if (game.device.desktop) {
-            text = 'press the up arrow key to start';
-        }
-        else {
-            text = 'touch the screen to start';
-        }
-
-        // Display the text variable
-        var startLabel = game.add.text(game.width/2, game.height-80, text, { font: '25px Arial', fill: '#ffffff' });
 
         game.add.image(0, 0, 'background');
 
@@ -31,7 +20,17 @@ var menuState = {
         var scoreLabel = game.add.text(game.width/2, game.height/2, text, { font: '25px Arial', fill: '#ffffff', align: 'center' });
         scoreLabel.anchor.setTo(0.5, 0.5);
 
-        var startLabel = game.add.text(game.width/2, game.height-80, 'press the up arrow key to start', { font: '25px Arial', fill: '#ffffff' });
+         // Store the relevant text based on the device used
+        var text;
+        if (game.device.desktop) {
+            text = 'press the up arrow key to start';
+        }
+        else {
+            text = 'touch the screen to start';
+        }
+
+        // Display the text variable
+        var startLabel = game.add.text(game.width/2, game.height-80, text, { font: '25px Arial', fill: '#ffffff' });
 
         startLabel.anchor.setTo(0.5, 0.5);
         game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
