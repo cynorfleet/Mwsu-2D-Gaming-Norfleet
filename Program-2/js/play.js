@@ -80,6 +80,9 @@ var playState = {
         game.physics.arcade.overlap(this.player, this.coin, this.takeCoin, null, this);
         game.physics.arcade.overlap(this.player, this.enemies, this.playerDie, null, this);
 
+        // every 10 secs process enemy AI
+        game.time.events.loop(1000, this.enemyAI, this);
+
         this.movePlayer();
 
         if (!this.player.inWorld) {
@@ -88,8 +91,6 @@ var playState = {
     },
 
     movePlayer: function() {
-
-        game.time.events.loop(1000, this.enemyAI, this);
 
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
@@ -112,13 +113,25 @@ var playState = {
         }
     },
 
-    enemyAI: function(){
-        var aggressive = game.rnd.integerInRange(1, 10);
+    genAggro: function(enemy){
 
-        if(aggressive > 8)
+        // generate a rand number
+        this.aggressive = game.rnd.integerInRange(1, 10);
+
+        // if it falls within range make enemy chase player
+        if(this.aggressive > 1)
             {
-                this.player.body.velocity.x =
+                console.log("Speed is " + this.Speedx);
+                enemy.body.velocity.x += this.playerSpeedx;
+
             }
+
+    },
+
+    enemyAI: function(){
+        this.Speedx = this.player.body.velocity.x;
+        this.Speedy = this.player.body.velocity.y;
+        this.enemies.forEachAlive(this.genAggro, this.enemies, this);
 
     },
 
