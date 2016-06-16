@@ -116,7 +116,7 @@ var playState = {
         this.moveRight = false;
 
         // Add the move left button
-        var leftButton = game.add.sprite(50, 240, 'leftButton');
+        var leftButton = game.add.sprite(20, 240, 'leftButton');
         leftButton.inputEnabled = true;
         leftButton.alpha = 0.5;
 
@@ -127,7 +127,7 @@ var playState = {
         leftButton.events.onInputUp.add(this.setLeftFalse, this);
 
         // Add the move right button
-        var rightButton = game.add.sprite(130, 240, 'rightButton');
+        var rightButton = game.add.sprite(110, 240, 'rightButton');
         rightButton.inputEnabled = true;
         rightButton.alpha = 0.5;
 
