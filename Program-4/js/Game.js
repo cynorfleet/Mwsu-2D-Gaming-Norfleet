@@ -1,5 +1,14 @@
 var SpaceHipster = SpaceHipster || {};
 
+// Declare difficulty variable
+var skillLevel;
+// Define skilllevel parameters;
+var Easy = 2550;
+var Medium = 50150;
+var Hard = 150250;
+// The ratio of large asteroids (0-100)
+var asteroidSize
+
 //title screen
 SpaceHipster.Game = function(){};
 
@@ -94,6 +103,28 @@ SpaceHipster.Game.prototype = {
       asteriod.body.collideWorldBounds = true;
     }
   },
+
+    generateAsteriod: function() {
+        this.asteroids = this.game.add.group();
+
+      //enable physics in them
+        this.asteroids.enableBody = true;
+
+      //phaser's random number generator
+        var asteriod;
+
+      // MAKE THE ASTEROID
+      //add sprite
+      asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
+      asteriod.scale.setTo(this.game.rnd.integerInRange(10, 40)/10);
+
+      //physics properties
+      asteriod.body.velocity.x = this.game.rnd.integerInRange(-20, 20);
+      asteriod.body.velocity.y = this.game.rnd.integerInRange(-20, 20);
+      asteriod.body.immovable = true;
+      asteriod.body.collideWorldBounds = true;
+      },
+
   hitAsteroid: function(player, asteroid) {
     //play explosion sound
     this.explosionSound.play();
