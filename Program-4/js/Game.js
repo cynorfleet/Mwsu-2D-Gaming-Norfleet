@@ -8,7 +8,7 @@ var Medium = 50150;
 var Hard = 150250;
 // The ratio of large asteroids (0-100)
 var astroidarray = [];
-var ROCK_NUM_TOTAL = 100;
+var ROCK_NUM_TOTAL = Hard;
 
 //title screen
 SpaceHipster.Game = function(){};
