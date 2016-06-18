@@ -7,13 +7,14 @@ var Easy = 2550;
 var Medium = 50150;
 var Hard = 150250;
 // The ratio of large asteroids (0-100)
-var asteroidSize
+var asteroidSize;
 
 //title screen
 SpaceHipster.Game = function(){};
 
 SpaceHipster.Game.prototype = {
   create: function() {
+
   	//set world dimensions
     this.game.world.setBounds(0, 0, 1920, 1920);
 
@@ -25,6 +26,11 @@ SpaceHipster.Game.prototype = {
     this.player.scale.setTo(2);
     this.player.animations.add('fly', [0, 1, 2, 3], 5, true);
     this.player.animations.play('fly');
+
+      //initializing the physics of asteroids
+      this.asteroids = this.game.add.group();
+      //enable physics in them
+      this.asteroids.enableBody = true;
 
     //player initial score of zero
     this.playerScore = 0;
@@ -39,7 +45,7 @@ SpaceHipster.Game.prototype = {
 
     //generate game elements
     this.generateCollectables();
-    this.generateAsteriods();
+    this.generateAsteriod();
 
     //show score
     this.showLabels();
@@ -48,6 +54,9 @@ SpaceHipster.Game.prototype = {
     this.explosionSound = this.game.add.audio('explosion');
     console.log(this.explosionSound);
     this.collectSound = this.game.add.audio('collect');
+
+    // every 10 secs process generateAsteroid
+    this.game.time.events.loop(2000, this.generateAsteriod, this);
   },
   update: function() {
     if(this.game.input.activePointer.justPressed()) {
@@ -105,13 +114,11 @@ SpaceHipster.Game.prototype = {
   },
 
     generateAsteriod: function() {
-        this.asteroids = this.game.add.group();
-
-      //enable physics in them
-        this.asteroids.enableBody = true;
-
-      //phaser's random number generator
         var asteriod;
+        //random large size ratio generator(0-100)
+        var sizeseed = this.game.rnd.integerInRange(0-100);
+        if(sizeseed == 0)
+            asteroidSize = this.game.rnd.integerInRange(16, 47);
 
       // MAKE THE ASTEROID
       //add sprite
