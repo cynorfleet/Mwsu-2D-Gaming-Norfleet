@@ -58,6 +58,9 @@ SpaceHipster.Game.prototype = {
     //Populate astroid sizes
     this.sizeGen();
 
+      //Debug
+      console.log(astroidarray)
+
     // every 10 secs process generateAsteroid
     this.game.time.events.loop(2000, this.generateAsteriod, this);
   },
