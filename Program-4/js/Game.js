@@ -7,7 +7,8 @@ var Easy = 2550;
 var Medium = 50150;
 var Hard = 150250;
 // The ratio of large asteroids (0-100)
-var asteroidSize;
+var astroidarray = [];
+var ROCK_NUM_TOTAL = 100;
 
 //title screen
 SpaceHipster.Game = function(){};
@@ -45,7 +46,6 @@ SpaceHipster.Game.prototype = {
 
     //generate game elements
     this.generateCollectables();
-    this.generateAsteriod();
 
     //show score
     this.showLabels();
@@ -54,6 +54,9 @@ SpaceHipster.Game.prototype = {
     this.explosionSound = this.game.add.audio('explosion');
     console.log(this.explosionSound);
     this.collectSound = this.game.add.audio('collect');
+
+    //Populate astroid sizes
+    this.sizeGen();
 
     // every 10 secs process generateAsteroid
     this.game.time.events.loop(2000, this.generateAsteriod, this);
@@ -71,6 +74,40 @@ SpaceHipster.Game.prototype = {
     //overlapping between player and collectables
     this.game.physics.arcade.overlap(this.player, this.collectables, this.collect, null, this);
   },
+
+    sizeGen: function(){
+        //generate the ratio of large rocks
+        var rock_size_percent = this.game.rnd.integerInRange(0, 100);
+        //zero percent of rocks are large
+        if (rock_size_percent == 0)
+            for(var x = 0; x < ROCK_NUM_TOTAL; x++)
+                //push all small rocks to array
+                this.pushRocksToArray(false);
+        //100 percent of rocks are large
+        else if (rock_size_percent == 100)
+            for(var x = 0; x < ROCK_NUM_TOTAL; x++)
+                //push all large rocks to array
+                this.pushRocksToArray(true);
+        //mixed ratio of rock sizes
+        else{
+            //push the percent of large rocks to array
+            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * (rock_size_percent/100)); x++)
+                this.pushRocksToArray(true);
+            //push the percent of remaining small rocks to array
+            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * ( 1 - rock_size_percent/100)); x++)
+                this.pushRocksToArray(true);
+        }
+    },
+
+    pushRocksToArray: function(size){
+        //if wanting to push big rocks
+        if (size == true)
+            astroidarray.push(this.game.rnd.integerInRange(90, 128));
+        //if wanting to push small rocks
+        else
+            astroidarray.push(this.game.rnd.integerInRange(16, 32));
+    },
+
   generateCollectables: function() {
     this.collectables = this.game.add.group();
 
@@ -79,7 +116,7 @@ SpaceHipster.Game.prototype = {
     this.collectables.physicsBodyType = Phaser.Physics.ARCADE;
 
     //phaser's random number generator
-    var numCollectables = this.game.rnd.integerInRange(100, 150)
+    var numCollectables = this.game.rnd.integerInRange(100, 150);
     var collectable;
 
     for (var i = 0; i < numCollectables; i++) {
@@ -103,7 +140,7 @@ SpaceHipster.Game.prototype = {
     for (var i = 0; i < numAsteroids; i++) {
       //add sprite
       asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
-      asteriod.scale.setTo(this.game.rnd.integerInRange(10, 40)/10);
+      asteriod.scale.setTo(astroidarray/100);
 
       //physics properties
       asteriod.body.velocity.x = this.game.rnd.integerInRange(-20, 20);
@@ -118,7 +155,7 @@ SpaceHipster.Game.prototype = {
         //random large size ratio generator(0-100)
         var sizeseed = this.game.rnd.integerInRange(0-100);
         if(sizeseed == 0)
-            asteroidSize = this.game.rnd.integerInRange(16, 47);
+            astroidarray = this.game.rnd.integerInRange(16, 47);
 
       // MAKE THE ASTEROID
       //add sprite
@@ -130,6 +167,9 @@ SpaceHipster.Game.prototype = {
       asteriod.body.velocity.y = this.game.rnd.integerInRange(-20, 20);
       asteriod.body.immovable = true;
       asteriod.body.collideWorldBounds = true;
+
+        //DEBUG
+        console.log(asteriod.height)
       },
 
   hitAsteroid: function(player, asteroid) {
