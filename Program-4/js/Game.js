@@ -62,7 +62,7 @@ SpaceHipster.Game.prototype = {
       console.log(astroidarray)
 
     // every 10 secs process generateAsteroid
-    this.game.time.events.loop(2000, this.generateAsteriod, this);
+    this.game.time.events.loop(500, this.generateAsteriod, this);
   },
   update: function() {
     if(this.game.input.activePointer.justPressed()) {
@@ -81,6 +81,8 @@ SpaceHipster.Game.prototype = {
     sizeGen: function(){
         //generate the ratio of large rocks
         var rock_size_percent = this.game.rnd.integerInRange(0, 100);
+        //DEBUG
+        console.log("rocksize%: " + rock_size_percent);
         //zero percent of rocks are large
         if (rock_size_percent == 0)
             for(var x = 0; x < ROCK_NUM_TOTAL; x++)
@@ -93,11 +95,11 @@ SpaceHipster.Game.prototype = {
                 this.pushRocksToArray(true);
         //mixed ratio of rock sizes
         else{
-            //push the percent of large rocks to array
-            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * (rock_size_percent/100)); x++)
-                this.pushRocksToArray(true);
             //push the percent of remaining small rocks to array
             for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * ( 1 - rock_size_percent/100)); x++)
+                this.pushRocksToArray(false);
+            //push the percent of large rocks to array
+            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * (rock_size_percent/100)); x++)
                 this.pushRocksToArray(true);
         }
     },
@@ -163,7 +165,8 @@ SpaceHipster.Game.prototype = {
       // MAKE THE ASTEROID
       //add sprite
       asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
-      asteriod.scale.setTo(this.game.rnd.integerInRange(10, 40)/10);
+        var pik = this.game.rnd.weightedPick(astroidarray) / 1000 * 20;
+      asteriod.scale.setTo(pik);
 
       //physics properties
       asteriod.body.velocity.x = this.game.rnd.integerInRange(-20, 20);
