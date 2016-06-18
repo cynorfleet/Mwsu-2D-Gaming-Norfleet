@@ -8,7 +8,7 @@ var Medium = 50150;
 var Hard = 150250;
 // The ratio of large asteroids (0-100)
 var astroidarray = [];
-var ROCK_NUM_TOTAL = 10;
+var ARRAY_NUM_TOTAL = 1000;
 
 //title screen
 SpaceHipster.Game = function(){};
@@ -56,7 +56,7 @@ SpaceHipster.Game.prototype = {
     this.collectSound = this.game.add.audio('collect');
 
     //Populate astroid sizes and store size
-    var size = this.sizeGen();
+    this.sizeGen();
 
     //Debug
     console.log(astroidarray)
@@ -86,31 +86,45 @@ SpaceHipster.Game.prototype = {
         //if zero percent of rocks are large
         if (rock_size_percent == 0)
             //push all small rocks to array
-            for(var x = 0; x < ROCK_NUM_TOTAL; x++)
+            for(var x = 0; x < ARRAY_NUM_TOTAL; x++)
                 this.pushRocksToArray("small");
         //if 100 percent of rocks are large
         else if (rock_size_percent == 100)
             //push all large rocks to array
-            for(var x = 0; x < ROCK_NUM_TOTAL; x++)
+            for(var x = 0; x < ARRAY_NUM_TOTAL; x++)
                 this.pushRocksToArray("large");
         //if mixed ratio of rock sizes
         else{
             //push the percent of remaining small rocks to array
-            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * ( 1 - rock_size_percent/100)); x++)
-                this.pushRocksToArray(size = "small");
+            for(var x = 0; x < Math.round(ARRAY_NUM_TOTAL * ( 1 - rock_size_percent/100)); x++)
+                this.pushRocksToArray("small");
             //push the percent of large rocks to array
-            for(var x = 0; x < Math.round(ROCK_NUM_TOTAL * (rock_size_percent/100)); x++)
-                this.pushRocksToArray(size = "large");
+            for(var x = 0; x < Math.round(ARRAY_NUM_TOTAL * (rock_size_percent/100)); x++)
+                this.pushRocksToArray("large");
         }
     },
 
-    pushRocksToArray: function(){
-        //if wanting to push big rocks
-        if (size == "large")
-            astroidarray.push(this.game.rnd.integerInRange(90, 128));
-        //if wanting to push small rocks
-        else
-            astroidarray.push(this.game.rnd.integerInRange(16, 32));
+    pushRocksToArray: function(size){
+        var rockType = {
+    sizePick: null,
+    sizeType: ""
+            };
+        //if wanting to push big rock object to array
+        if (size == "large"){
+            //puts random large size in rock object
+            rockType.sizePick = this.game.rnd.integerInRange(90, 128);
+            //tags rock as being large
+            rockType.sizeType = "large";
+            //pushes it to the array of astroids
+            astroidarray.push(rockType);
+        }
+        //if wanting to push small rock object to array
+        else{
+            rockType.sizePick = this.game.rnd.integerInRange(16, 32);
+            rockType.sizeType = "small"
+            astroidarray.push(rockType);
+        }
+        console.log(rockType);
     },
 
   generateCollectables: function() {
@@ -132,28 +146,6 @@ SpaceHipster.Game.prototype = {
     }
 
   },
-  generateAsteriods: function() {
-    this.asteroids = this.game.add.group();
-
-    //enable physics in them
-    this.asteroids.enableBody = true;
-
-    //phaser's random number generator
-    var numAsteroids = this.game.rnd.integerInRange(150, 200)
-    var asteriod;
-
-    for (var i = 0; i < numAsteroids; i++) {
-      //add sprite
-      asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
-      asteriod.scale.setTo(astroidarray/100);
-
-      //physics properties
-      asteriod.body.velocity.x = this.game.rnd.integerInRange(-20, 20);
-      asteriod.body.velocity.y = this.game.rnd.integerInRange(-20, 20);
-      asteriod.body.immovable = true;
-      asteriod.body.collideWorldBounds = true;
-    }
-  },
 
     generateAsteriod: function(size) {
         var asteriod;
@@ -164,8 +156,8 @@ SpaceHipster.Game.prototype = {
 
       // MAKE THE ASTEROID
       asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
-        //scale asteroid
-        var pik = this.game.rnd.weightedPick(astroidarray) / 1000 * 20;
+        //scale asteroid by picking from arrayindex and grabbing its size data
+        var pik = this.game.rnd.weightedPick(astroidarray).sizePick / 1000 * 20;
       asteriod.scale.setTo(pik);
 
       //physics properties
