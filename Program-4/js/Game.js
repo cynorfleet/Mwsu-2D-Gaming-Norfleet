@@ -8,7 +8,11 @@ var Medium = 50150;
 var Hard = 150250;
 // The ratio of large asteroids (0-100)
 var astroidarray = [];
-var ROCK_NUM_TOTAL = 100;
+var ROCK_NUM_TOTAL = Hard;
+var rockType = {
+    sizePick: Null;
+    sizeType: "";
+}
 
 //title screen
 SpaceHipster.Game = function(){};
@@ -100,12 +104,18 @@ SpaceHipster.Game.prototype = {
     },
 
     pushRocksToArray: function(size){
-        //if wanting to push big rocks
-        if (size == true)
-            astroidarray.push(this.game.rnd.integerInRange(90, 128));
-        //if wanting to push small rocks
-        else
-            astroidarray.push(this.game.rnd.integerInRange(16, 32));
+        //if wanting to push big rock object to array
+        if (size == true){
+            rockType.sizePick = this.game.rnd.integerInRange(90, 128);
+            rockType.sizeType = "large";
+            astroidarray.push(rockType);
+        }
+        //if wanting to push small rock object to array
+        else{
+            rockType.sizePick = this.game.rnd.integerInRange(16, 32);
+            rockType.sizeType = "small"
+            astroidarray.push(rocktype);
+        }
     },
 
   generateCollectables: function() {
