@@ -1,11 +1,13 @@
 var SpaceHipster = SpaceHipster || {};
 
-// Declare difficulty variable
-var skillLevel;
-// Define skilllevel parameters;
-var Easy = 2550;
-var Medium = 50150;
-var Hard = 150250;
+// Declare difficulty object
+var SkillLevel = {
+    // Define SkillLevel parameters;
+    easy: 2550,
+    medium: 50150,
+    hard: 150250,
+    choice: null
+    };
 // The ratio of large asteroids (0-100)
 var astroidarray = [];
 var ARRAY_NUM_TOTAL = 1000;
@@ -25,7 +27,7 @@ SpaceHipster.Game.prototype = {
     //create player
     this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'playership');
     this.player.scale.setTo(2);
-    this.player.animations.add('fly', [0, 1, 2, 3], 5, true);
+    this.player.animations.add('fly', [0, 1, 2, 3], 5, true)
     this.player.animations.play('fly');
 
       //initializing the physics of asteroids
@@ -105,9 +107,12 @@ SpaceHipster.Game.prototype = {
     },
 
     pushRocksToArray: function(size){
+       console.log("pushRocksToArray: " + size)
+
         var rockType = {
-    sizePick: null,
-    sizeType: ""
+        sizePick: null,
+        sizeType: "",
+        velocityRock: null
             };
         //if wanting to push big rock object to array
         if (size == "large"){
@@ -115,6 +120,20 @@ SpaceHipster.Game.prototype = {
             rockType.sizePick = this.game.rnd.integerInRange(90, 128);
             //tags rock as being large
             rockType.sizeType = "large";
+
+            //Temp push to populate velocity (based on weighted array)
+            astroidarray.push(rockType);
+
+            //VELOCITY
+            //since smaller numbers are in front of array use these as slower speeds
+            rockType.velocityRock = this.game.rnd.weightedPick(astroidarray).sizePick;
+            console.log("before speed: " + rockType.velocityRock);
+            //make the velocity either positive or negative
+            rockType.velocityRock *= this.game.rnd.pick([-1,1])
+            console.log("after speed: " + rockType.velocityRock);
+
+            //Revert temp push
+            astroidarray.pop();
             //pushes it to the array of astroids
             astroidarray.push(rockType);
         }
@@ -122,6 +141,26 @@ SpaceHipster.Game.prototype = {
         else{
             rockType.sizePick = this.game.rnd.integerInRange(16, 32);
             rockType.sizeType = "small"
+
+            //Temp push to populate velocity (based on weighted array)
+            astroidarray.push(rockType);
+
+            //VELOCITY
+            //since higher numbers are in back of array use these as faster speeds
+            //reverse the array to get higher values to front
+            astroidarray.reverse();
+
+            rockType.velocityRock = this.game.rnd.weightedPick(astroidarray).sizePick;
+            console.log("before speed: " + rockType.velocityRock);
+            //make the velocity either positive or negative
+            rockType.velocityRock *= this.game.rnd.pick([-1,1])
+            console.log("after speed: " + rockType.velocityRock);
+
+            //put array to original order
+            astroidarray.reverse();
+            //Revert temp push
+            astroidarray.pop();
+            //pushes it to the array of astroids
             astroidarray.push(rockType);
         }
         console.log(rockType);
@@ -149,20 +188,18 @@ SpaceHipster.Game.prototype = {
 
     generateAsteriod: function(size) {
         var asteriod;
-        //random large size ratio generator(0-100)
-        var sizeseed = this.game.rnd.integerInRange(0-100);
-        if(sizeseed == 0)
-            astroidarray = this.game.rnd.integerInRange(16, 47);
+        //copy an asteroid favoring smaller
+        var chosenastroid = this.game.rnd.weightedPick(astroidarray);
 
       // MAKE THE ASTEROID
       asteriod = this.asteroids.create(this.game.world.randomX, this.game.world.randomY, 'rock');
         //scale asteroid by picking from arrayindex and grabbing its size data
-        var pik = this.game.rnd.weightedPick(astroidarray).sizePick / 1000 * 20;
+        var pik = chosenastroid.sizePick / 1000 * 20;
       asteriod.scale.setTo(pik);
 
       //physics properties
-      asteriod.body.velocity.x = this.game.rnd.integerInRange(-20, 20);
-      asteriod.body.velocity.y = this.game.rnd.integerInRange(-20, 20);
+      asteriod.body.velocity.x = chosenastroid.velocityRock;
+      asteriod.body.velocity.y = chosenastroid.velocityRock;
       asteriod.body.immovable = true;
       asteriod.body.collideWorldBounds = true;
 
