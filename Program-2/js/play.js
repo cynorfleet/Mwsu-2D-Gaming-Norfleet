@@ -61,6 +61,7 @@ var playState = {
         // Use no gravity
         this.emitter.gravity = 0;
 
+        if(!this.music){
          // music plays when game starts
         this.music = game.add.audio('music'); // Add the music
         this.music.loop = true; // Make it loop
@@ -71,6 +72,7 @@ var playState = {
         this.music.fadeIn(5000);
         // Decrease the volume from its current value to 0 over the duration
         this.music.fadeOut(5000);
+         }
         this.music.play(); // Start the music
         },
 
@@ -80,9 +82,6 @@ var playState = {
         game.physics.arcade.overlap(this.player, this.coin, this.takeCoin, null, this);
         game.physics.arcade.overlap(this.player, this.enemies, this.playerDie, null, this);
 
-        // every 10 secs process enemy AI
-        game.time.events.loop(1000, this.enemyAI, this);
-
         this.movePlayer();
 
         if (!this.player.inWorld) {
@@ -91,7 +90,6 @@ var playState = {
     },
 
     movePlayer: function() {
-
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -200;
             this.player.animations.play('left'); // Left animation
@@ -111,28 +109,6 @@ var playState = {
             // plays sound if player jumps
             this.jumpSound.play();
         }
-    },
-
-    genAggro: function(enemy){
-
-        // generate a rand number
-        this.aggressive = game.rnd.integerInRange(1, 10);
-
-        // if it falls within range make enemy chase player
-        if(this.aggressive > 1)
-            {
-                console.log("Speed is " + this.Speedx);
-                enemy.body.velocity.x += this.playerSpeedx;
-
-            }
-
-    },
-
-    enemyAI: function(){
-        this.Speedx = this.player.body.velocity.x;
-        this.Speedy = this.player.body.velocity.y;
-        this.enemies.forEachAlive(this.genAggro, this.enemies, this);
-
     },
 
     takeCoin: function(player, coin) {
@@ -204,7 +180,7 @@ var playState = {
     playerDie: function() {
 
         // stop music at death
-        this.music.stop();
+        //this.music.stop();
 
         // plays sound if player dies
         this.deadSound.play();
