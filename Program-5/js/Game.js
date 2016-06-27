@@ -23,6 +23,9 @@ TopDownGame.Game.prototype = {
         //make the maze
         this.carveMaze(1, 1);
 
+        //make rooms
+        this.carveRoom();
+
         this.createItems();
         this.createDoors();
         this.map.putTile(222, 6, -1, 1);
@@ -90,7 +93,22 @@ TopDownGame.Game.prototype = {
         }
     },
 
-
+    carveRoom() {
+        roomLocationX = this.game.rnd.integerInRange(1, this.map.width - 1);
+        roomLocationY = this.game.rnd.integerInRange(1, this.map.height - 1);
+        roomWidth = this.game.rnd.integerInRange(5, 10);
+        roomHeight = this.game.rnd.integerInRange(5, 10);
+        var x = 0;
+        var y = 0;
+        while (x < roomWidth && x + roomLocationX < this.map.width - 1) {
+            while (y < roomHeight && x + roomLocationY < this.map.height - 1) {
+                this.map.removeTile(roomLocationX, roomLocationY + y, 1);
+                y++;
+            }
+            this.map.removeTile(roomLocationX + x, roomLocationY, 1);
+            x++;
+        }
+    },
 
 
     createItems: function () {
@@ -102,8 +120,8 @@ TopDownGame.Game.prototype = {
         result.forEach(function (element) {
             this.createFromTiledObject(element, this.items);
         }, this);
-    },
-    createDoors: function () {
+    }
+    , createDoors: function () {
         //create doors
         this.doors = this.game.add.group();
         this.doors.enableBody = true;
@@ -127,8 +145,7 @@ TopDownGame.Game.prototype = {
             }
         });
         return result;
-    },
-    //create a sprite from an object
+    }, //create a sprite from an object
     createFromTiledObject: function (element, group) {
         var sprite = group.create(element.x, element.y, element.properties.sprite);
 
@@ -136,8 +153,8 @@ TopDownGame.Game.prototype = {
         Object.keys(element.properties).forEach(function (key) {
             sprite[key] = element.properties[key];
         });
-    },
-    update: function () {
+    }
+    , update: function () {
         //collision
         this.game.physics.arcade.collide(this.player, this.blockedLayer);
         this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
@@ -161,14 +178,14 @@ TopDownGame.Game.prototype = {
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x += 50;
         }
-    },
-    collect: function (player, collectable) {
+    }
+    , collect: function (player, collectable) {
         console.log('yummy!');
 
         //remove sprite
         collectable.destroy();
-    },
-    enterDoor: function (player, door) {
+    }
+    , enterDoor: function (player, door) {
         console.log('entering door that will take you to ' + door.targetTilemap + ' on x:' + door.targetX + ' and y:' + door.targetY);
-    },
-};
+    }
+, };
