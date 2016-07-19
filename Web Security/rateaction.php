@@ -2,7 +2,7 @@
 
 <body>
 
-    in .php file
+    You have been redirected to reaction.php
     <br> You rated Dr Passos with:
     <?php echo $_POST["stars"]; ?>
         stars
