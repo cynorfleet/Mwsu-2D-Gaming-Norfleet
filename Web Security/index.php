@@ -26,10 +26,6 @@
     <br>
     <br>
     <?php 
-     if( !isset ($_POST['submit']))
-    {
-         echo "it didnt work";
-     }
     if( isset ($_POST['submit']))
     {
         $answer = $_POST[stars];
