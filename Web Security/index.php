@@ -28,14 +28,19 @@
     <?php 
      if( !isset ($_POST['stars']))
     {
-         echo "it didnt work";
+         echo "Please enter value";
      }
     if( isset ($_POST['stars']))
     {
         $answer = $_POST["stars"];
         echo "You rated Dr Passos with: ";
         echo $answer;
-        echo "stars";
+        echo " stars";
+        echo nl2br nl2br; 
+        if($answer <3){
+        echo '<img src="http://img.memecdn.com/bugs-bunny-amp-quot-don-amp-039-t-care-amp-quot_fb_1991675.jpg"';
+        }
+        
     }
     ?>
         <br>
