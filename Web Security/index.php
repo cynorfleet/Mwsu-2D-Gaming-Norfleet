@@ -24,9 +24,12 @@
         </div>
     </form>
     <br>
-    <br> You rated Dr Passos with:
-    <?php echo $_POST["stars"]; ?>
-        stars
+    <br>
+    <?php 
+    echo "You rated Dr Passos with:";
+    echo $_POST["stars"];
+    echo "stars";
+    ?>
         <br>
 </body>
 
