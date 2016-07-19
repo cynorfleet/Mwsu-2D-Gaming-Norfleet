@@ -20,13 +20,13 @@
             <br>
             <input type="radio" name="stars" value="5"> 5 Stars
             <br>
-            <input type="submit" value="Submit">
+            <input type="submit" value="submit">
         </div>
     </form>
     <br>
     <br>
     <?php 
-    if( isset ($_POST['Submit']))
+    if( isset ($_POST['submit']))
     {
         echo "You rated Dr Passos with: ";
         echo $_POST["stars"];
