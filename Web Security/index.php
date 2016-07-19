@@ -53,7 +53,7 @@
         }
         elseif($answer <=5)
         {
-             $path = '/SWAG.png';
+             $path = 'SWAG.png';
             print '<img src="'.$path.'" alt="dank meme" />';
         }
     }
