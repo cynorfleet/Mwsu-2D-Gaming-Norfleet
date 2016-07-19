@@ -26,7 +26,7 @@
     <br>
     <br>
     <?php 
-    if( isset ($_POST['submit']))
+    if( isset ($_POST['Submit']))
     {
         echo "You rated Dr Passos with: ";
         echo $_POST["stars"];
