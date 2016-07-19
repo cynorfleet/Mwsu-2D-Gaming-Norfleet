@@ -34,7 +34,7 @@
     {
         $answer = $_POST["stars"];
         echo "You rated Dr Passos with: ";
-        echo $answer
+        echo $answer;
         echo "stars";
     }
     ?>
