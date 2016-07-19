@@ -36,8 +36,10 @@
         echo "You rated Dr Passos with: ";
         echo $answer;
         echo " stars";
-        echo "<br";
-        echo "<br>";
+        
+        echo  nl2br ("\n");
+        echo  nl2br ("\n");
+
         if($answer <3)
         {
              $path = 'http://img.memecdn.com/bugs-bunny-amp-quot-don-amp-039-t-care-amp-quot_fb_1991675.jpg';
