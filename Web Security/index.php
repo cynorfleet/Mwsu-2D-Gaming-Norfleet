@@ -35,7 +35,8 @@
         $answer = $_POST["stars"];
         echo "You rated Dr Passos with: ";
         echo $answer;
-        echo " stars"; 
+        echo " stars";
+        echo  nl2br nl2br;
         if($answer <3)
         {
              $path = 'http://img.memecdn.com/bugs-bunny-amp-quot-don-amp-039-t-care-amp-quot_fb_1991675.jpg';
