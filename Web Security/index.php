@@ -46,12 +46,12 @@
             print '<img src="'.$path.'" alt="hater" />';
         }
         
-        if($answer <4)
+        elseif($answer <4)
         {
              $path = 'http://m.memegen.com/obe54d.jpg';
             print '<img src="'.$path.'" alt="damn son" />';
         }
-        if($answer <=5)
+        elseif($answer <=5)
         {
              $path = '/SWAG.png';
             print '<img src="'.$path.'" alt="dank meme" />';
