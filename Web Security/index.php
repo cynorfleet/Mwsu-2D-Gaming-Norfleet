@@ -6,7 +6,7 @@
 
 <body>
     How would you rate Dr. Passos?
-    <form name="rate" action="rateaction.php" method="POST">
+    <form name="rate" method="POST">
 
         <div align="center">
             <br>
@@ -23,6 +23,11 @@
             <input type="submit" value="Submit">
         </div>
     </form>
+    <br>
+    <br> You rated Dr Passos with:
+    <?php echo $_POST["stars"]; ?>
+        stars
+        <br>
 </body>
 
 </html>
