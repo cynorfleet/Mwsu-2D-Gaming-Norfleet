@@ -2,12 +2,9 @@
 
 <body>
 
-
+    in .php file
     <br> You rated Dr Passos with:
-    <?php
-    echo "now in .php"
-    echo $_POST["stars"];
-    ?>
+    <?php echo $_POST["stars"]; ?>
         stars
         <br>
 
