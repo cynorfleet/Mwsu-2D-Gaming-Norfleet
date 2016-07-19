@@ -26,7 +26,7 @@
     <br>
     <br>
     <?php 
-     if( !isset ($_POST['submit']))
+     if( !isset ($_POST['stars']))
     {
          echo "it didnt work";
      }
