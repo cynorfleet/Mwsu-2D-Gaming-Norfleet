@@ -38,7 +38,7 @@
         echo " stars";
         echo nl2br nl2br; 
         if($answer <3){
-        echo <img src="http://img.memecdn.com/bugs-bunny-amp-quot-don-amp-039-t-care-amp-quot_fb_1991675.jpg";
+        echo '<img src="http://img.memecdn.com/bugs-bunny-amp-quot-don-amp-039-t-care-amp-quot_fb_1991675.jpg">';
         }
         
     }
