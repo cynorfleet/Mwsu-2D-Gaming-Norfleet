@@ -2,7 +2,7 @@ var TopDownGame = TopDownGame || {};
 
 //title screen
 TopDownGame.Game = function () {};
-var bulletTime = 0;
+
 TopDownGame.Game.prototype = {
     create: function () {
         this.map = this.game.add.tilemap('level1');
@@ -12,59 +12,41 @@ TopDownGame.Game.prototype = {
 
         //create layer
         this.backgroundlayer = this.map.createLayer('backgroundLayer');
-        this.perimeterlayer = this.map.createLayer('perimeterLayer')
         this.blockedLayer = this.map.createLayer('blockedLayer');
+        this.perimeterLayer = this.map.createLayer('perimeter')
 
-        //collision on blockedLayer and perimeterLayer
+        //collision on blockedLayer
         this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
-        this.map.setCollisionBetween(1, 2000, true, 'perimeterLayer');
 
+        //collision on blockedLayer
+        this.map.setCollisionBetween(1, 2000, true, 'perimeter');
 
         //resizes the game world to match the layer dimensions
         this.backgroundlayer.resizeWorld();
 
-        //unused
-        //this.createItems();
-        //this.createDoors();
+        this.carveMaze(1, 1);
+        this.rooms = this.game.rnd.integerInRange(20, 40);
+        for (i = 0; i < this.rooms; i++) {
+            this.carveRoom();
+        }
+
+        this.createItems();
+        this.createDoors();
+        this.map.putTile(222, 6, -1, 1);
+        //this.map.putTile(220, 4, 17, 0);;
+        //this.map.removeTile(4, 17, 1);
 
         //create player
-        var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
-        this.spawnPlayer();
-        //this.player.scale.setTo(0.80,0.80);
-        this.player.anchor.setTo(0.5, 0.5);
+        var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
+        this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
         this.game.physics.arcade.enable(this.player);
-
-        //create the weapon
-        //  Creates 10 bullets, using the 'bullet' graphic
-        weapon = this.game.add.weapon(10, 'bullets');
-        //  The bullet will be automatically killed when it leaves the world bounds
-        weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-        //  The speed at which the bullet is fired
-        weapon.bulletSpeed = 400;
-        //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
-        weapon.fireRate = 460;
-        //  Tell the Weapon to track the 'player' Sprite, offset by 0px horizontally, 0 vertically
-        weapon.trackSprite(this.player, 0, 0);
-
 
         //the camera will follow the player in the world
         this.game.camera.follow(this.player);
-        this.game.camera.scaleto(5, 5);
-
-
 
         //move player with cursor keys
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
-        //fire bullets with spacebar
-        this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
-
-        this.map.removeTile(1, 1, 1);
-        this.carveMaze(1, 1);
-        this.rooms = this.game.rnd.integerInRange(10, 30);
-        for (i = 0; i < this.rooms; i++) {
-            this.carveRoom();
-        }
     },
 
     carveMaze(x, y) {
@@ -91,16 +73,6 @@ TopDownGame.Game.prototype = {
             this.map.removeTile(x + 2, y, 1);
             this.carveMaze(x + 2, y);
         }
-        if (x - 2 > 0 && this.map.getTile(x - 2, y, 1) != null) {
-            this.map.removeTile(x - 1, y, 1);
-            this.map.removeTile(x - 2, y, 1);
-            this.carveMaze(x - 2, y);
-        }
-        if (x + 2 < this.game.width && this.map.getTile(x + 2, y, 1) != null) {
-            this.map.removeTile(x + 1, y, 1);
-            this.map.removeTile(x + 2, y, 1);
-            this.carveMaze(x + 2, y);
-        }
         //if we cannot move in a random direction then go where able.
         if (y - 2 > 0 && this.map.getTile(x, y - 2, 1) != null) {
             this.map.removeTile(x, y - 1, 1);
@@ -113,21 +85,16 @@ TopDownGame.Game.prototype = {
             this.map.removeTile(x, y + 2, 1);
             this.carveMaze(x, y + 2);
         }
-    },
-
-    //Places the player on an odd numbered sprite (empty)  
-    spawnPlayer: function () {
-        var x = this.game.rnd.integerInRange(1, this.map.width - 1);
-        while (this.game.math.isEven(x)) {
-            x = this.game.rnd.integerInRange(1, this.map.width - 1);
+        if (x - 2 > 0 && this.map.getTile(x - 2, y, 1) != null) {
+            this.map.removeTile(x - 1, y, 1);
+            this.map.removeTile(x - 2, y, 1);
+            this.carveMaze(x - 2, y);
         }
-        var y = this.game.rnd.integerInRange(1, this.map.height - 1);
-        while (this.game.math.isEven(y)) {
-            y = this.game.rnd.integerInRange(1, this.map.height - 1);
+        if (x + 2 < this.game.width && this.map.getTile(x + 2, y, 1) != null) {
+            this.map.removeTile(x + 1, y, 1);
+            this.map.removeTile(x + 2, y, 1);
+            this.carveMaze(x + 2, y);
         }
-        var spawn = this.map.getTile(x, y);
-        this.player = this.game.add.sprite(spawn.worldX + 8, spawn.worldY + 8, 'player');
-        //this.game.physics.arcade.overlap(this.player, this.blockedLayer, this.spawnPlayer, null, this);
     },
 
     carveRoom() {
@@ -137,16 +104,19 @@ TopDownGame.Game.prototype = {
         roomHeight = this.game.rnd.integerInRange(5, 10);
         var x = 0;
         var y = 0;
-        while (x < roomWidth && x + roomLocationX < this.map.width - 1) {
-            while (y < roomHeight && roomLocationY + y < this.map.height - 1) {
+        while (x < roomWidth && x + roomLocationX < this.map.width - 2) {
+            while (y < roomHeight && roomLocationY + y < this.map.height - 2) {
                 this.map.removeTile(roomLocationX + x, roomLocationY + y, 1);
                 y++;
             }
             this.map.removeTile(roomLocationX + x, roomLocationY + y, 1);
             x++;
         }
-    }
-    , createItems: function () {
+    },
+
+
+
+    createItems: function () {
         //create items
         this.items = this.game.add.group();
         this.items.enableBody = true;
@@ -188,26 +158,13 @@ TopDownGame.Game.prototype = {
         Object.keys(element.properties).forEach(function (key) {
             sprite[key] = element.properties[key];
         });
-    },
-
-    /*create blocks from blockedLayer
-    this.map.createFromTiledObject('blockedLayer', )*/
-
-
-
-
-
-
-
-
-
-    update: function () {
-        //collision and overlap
+    }
+    , update: function () {
+        //collision
         this.game.physics.arcade.collide(this.player, this.blockedLayer);
-        this.game.physics.arcade.collide(this.player, this.perimeterlayer);
+        this.game.physics.arcade.collide(this.player, this.perimeterLayer);
         this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
         this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-        this.game.physics.arcade.collide(weapon.bullets, this.blockedLayer, this.strike, null, this);
 
         //player movement
 
@@ -226,42 +183,9 @@ TopDownGame.Game.prototype = {
             this.player.body.velocity.x -= 50;
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x += 50;
-
         }
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-            if (this.cursors.up.isDown)
-                weapon.fireAngle = 270;
-            if (this.cursors.down.isDown)
-                weapon.fireAngle = 90;
-            if (this.cursors.right.isDown)
-                weapon.fireAngle = 0;
-            if (this.cursors.left.isDown)
-                weapon.fireAngle = 180;
-
-            weapon.fire();
-        }
-    },
-
-    strike: function (bullet, block) {
-        console.log('hit!');
-        bullet.kill();
-
-        block.alpha -= .25;
-
-        //Store the block into a variable
-        var make_it_dirty = this.map.getTile(block.x, block.y, this.blockedLayer);
-        //This places a copy of the block in the original block. This forces the layer to refresh itself so aplha changes are visable when standing still
-        this.map.putTile(make_it_dirty, make_it_dirty.x, make_it_dirty.y, this.blockedLayer);
-
-
-        if (block.alpha == 0) {
-            this.map.removeTile(block.x, block.y, this.blockedLayer);
-        }
-
-    },
-
-
-    collect: function (player, collectable) {
+    }
+    , collect: function (player, collectable) {
         console.log('yummy!');
 
         //remove sprite

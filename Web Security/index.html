@@ -5,24 +5,56 @@
 </head>
 
 <body>
-    How would you rate Dr. Passos?
-    <form name="rate" action="rateaction.php" method="POST">
+    <center>Chris's Epic Calculator
+        <center/>
+        <form name="variables" method="POST">
 
-        <div align="center">
-            <br>
-            <input type="radio" name="stars" value="1"> 1 Star
-            <br>
-            <input type="radio" name="stars" value="2"> 2 Stars
-            <br>
-            <input type="radio" name="stars" value="3"> 3 Stars
-            <br>
-            <input type="radio" name="stars" value="4"> 4 Stars
-            <br>
-            <input type="radio" name="stars" value="5"> 5 Stars
-            <br>
-            <input type="submit" value="Submit">
-        </div>
-    </form>
+            <div align="center">
+                <br> X
+                <input type="text" id="Xvar">
+                <br> Y
+                <input type="text" id="Yvar">
+                <br>
+                <input type="button" onclick="do_math(0)" id="addition" value="+">
+                <input type="button" onclick="do_math(1)" id="subtraction" value="-">
+                <br>
+                <br>
+                <br>
+                <script type="text/javascript">
+                    function do_math(w) {
+                        //Performs addition to x and y values
+                        function do_addition(x, y) {
+                            return result = x + y;
+                        }
+
+                        //Performs subtration to x and y values
+                        function do_subtraction(x, y) {
+                            return result = x - y;
+                        }
+
+                        var result = "choose operation";
+                        var x = document.getElementById('Xvar');
+                        x = parseInt(x);
+                        console.log("x parsed is " + x);
+                        var y = document.getElementById('Yvar');
+                        y = parseInt(y);
+                        console.log("y parsed is " + y);
+
+                        //Find out which operation was chosen and process input
+                        if (w == 0) {
+                            do_addition(x, y)
+                            alert("result is " + result);
+                        } else if (w == 1) {
+                            do_subtraction(x, y);
+                            alert("result is " + result);
+                        }
+
+                        //Send result to html
+                        document.write("Result : " + result);
+                    }
+                </script>
+            </div>
+        </form>
 </body>
 
 </html>
