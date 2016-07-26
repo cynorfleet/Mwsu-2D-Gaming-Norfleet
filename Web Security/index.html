@@ -7,54 +7,51 @@
 <body>
     <center>Chris's Epic Calculator
         <center/>
-        <form name="variables" method="POST">
+        <form name="calc">
 
             <div align="center">
                 <br> X
-                <input type="text" id="Xvar">
+                <input type="number" id="Xvar">
                 <br> Y
-                <input type="text" id="Yvar">
+                <input type="number" id="Yvar">
                 <br>
-                <input type="button" onclick="do_math(0)" id="addition" value="+">
-                <input type="button" onclick="do_math(1)" id="subtraction" value="-">
-                <br>
-                <br>
-                <br>
-                <script type="text/javascript">
-                    function do_math(w) {
-                        //Performs addition to x and y values
-                        function do_addition(x, y) {
-                            return result = x + y;
-                        }
+                <input type="button" id="addition" value="0" onclick="domath(0)">
 
-                        //Performs subtration to x and y values
-                        function do_subtraction(x, y) {
-                            return result = x - y;
-                        }
+                <input type="button" id="subtraction" value="1" onclick="domath(1)">
 
-                        var result = "choose operation";
-                        var x = document.getElementById('Xvar');
-                        x = parseInt(x);
-                        console.log("x parsed is " + x);
-                        var y = document.getElementById('Yvar');
-                        y = parseInt(y);
-                        console.log("y parsed is " + y);
+                <br> answer:
+                <output id="answer"></output>
 
-                        //Find out which operation was chosen and process input
-                        if (w == 0) {
-                            do_addition(x, y)
-                            alert("result is " + result);
-                        } else if (w == 1) {
-                            do_subtraction(x, y);
-                            alert("result is " + result);
-                        }
-
-                        //Send result to html
-                        document.write("Result : " + result);
-                    }
-                </script>
-            </div>
         </form>
+        </div>
+
+        <script language="JavaScript">
+            function domath(w) {
+
+                function add() {
+                    console.log("Now in addition");
+
+                    result = x + y;
+                    document.getElementById("answer").innerHTML = result;
+                }
+
+                function sub() {
+                    console.log("now in subtraction")
+
+                    result = x - y;
+                    document.getElementById("answer").innerHTML = result;
+                }
+                var x = parseInt(document.calc.Xvar.value);
+                var y = parseInt(document.calc.Yvar.value);
+
+                if (w == 0)
+                    add();
+                if (w == 1)
+                    sub();
+            }
+        </script>
+
+
 </body>
 
 </html>
