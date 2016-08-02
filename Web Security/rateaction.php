@@ -7,7 +7,7 @@
     <br> Your User name is
     <?php 
     $name = $_POST["user"];
-    echo $name;
+    echo "WORKS";
     
     ?>
         <br>
