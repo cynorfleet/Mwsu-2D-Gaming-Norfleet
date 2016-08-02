@@ -5,7 +5,9 @@
     You have been redirected to reaction.php
     <br>
     <br> Your User name is
-    <?php echo $_POST["user"]; 
+    <?php 
+    $name = $_POST["user"];
+    echo $name;
     
     ?>
         <br>
