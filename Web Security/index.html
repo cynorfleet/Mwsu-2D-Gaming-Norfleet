@@ -5,54 +5,20 @@
 </head>
 
 <body>
-    <center>Chris's Epic Calculator
+    <center>We Get Money Credit Union
         <center/>
-        <form name="variables" method="POST">
+        <form name="Login" action="rateaction.php" method="POST" <div align="center">
+            <br> Username
+            <input type="text" id="user">
+            <br> Password
+            <input type="text" id="pass">
+            <br>
+            <input type="button" onclick="checkacct(user)" id="Login" value="Login">
 
-            <div align="center">
-                <br> X
-                <input type="text" id="Xvar">
-                <br> Y
-                <input type="text" id="Yvar">
-                <br>
-                <input type="button" onclick="do_math(0)" id="addition" value="+">
-                <input type="button" onclick="do_math(1)" id="subtraction" value="-">
-                <br>
-                <br>
-                <br>
-                <script type="text/javascript">
-                    function do_math(w) {
-                        //Performs addition to x and y values
-                        function do_addition(x, y) {
-                            return result = x + y;
-                        }
+            <br>
+            <br>
+            <br>
 
-                        //Performs subtration to x and y values
-                        function do_subtraction(x, y) {
-                            return result = x - y;
-                        }
-
-                        var result = "choose operation";
-                        var x = document.getElementById('Xvar');
-                        x = parseInt(x);
-                        console.log("x parsed is " + x);
-                        var y = document.getElementById('Yvar');
-                        y = parseInt(y);
-                        console.log("y parsed is " + y);
-
-                        //Find out which operation was chosen and process input
-                        if (w == 0) {
-                            do_addition(x, y)
-                            alert("result is " + result);
-                        } else if (w == 1) {
-                            do_subtraction(x, y);
-                            alert("result is " + result);
-                        }
-
-                        //Send result to html
-                        document.write("Result : " + result);
-                    }
-                </script>
             </div>
         </form>
 </body>
