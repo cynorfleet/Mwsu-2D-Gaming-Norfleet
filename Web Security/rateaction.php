@@ -4,9 +4,10 @@
 
     You have been redirected to reaction.php
     <br>
-    <br> You rated Dr Passos with:
-    <?php echo $_POST["stars"]; ?>
-        stars
+    <br> Your User name is
+    <?php echo $_POST["user"]; 
+    
+    ?>
         <br>
 
 
