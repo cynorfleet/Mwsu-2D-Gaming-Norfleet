@@ -1,18 +1,5 @@
-<html>
-
-<body>
-
-    You have been redirected to reaction.php
-    <br>
-    <br> Your User name is
-    <?php 
+<?php 
     $name = $_POST["user"];
-    echo $name;
+    echo "usernane is: "+$name;
     
     ?>
-        <br>
-
-
-</body>
-
-</html>
